@@ -44,21 +44,26 @@
         <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
           <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"/></svg>
         </div>
-        <h1 class="text-lg font-semibold tracking-tight">AI Prompt Engineer</h1>
+        <h1 class="text-lg font-semibold tracking-tight" data-i18n="appTitle">AI Prompt Engineer</h1>
       </div>
       <div class="flex items-center gap-2">
-        <button onclick="clearForm()" class="text-xs px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="Clear all fields">
+        <!-- Language Selector -->
+        <select id="langSelector" onchange="setLanguage(this.value)" class="text-xs px-2 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
+          <option value="en">EN</option>
+          <option value="es">ES</option>
+        </select>
+        <button onclick="clearForm()" class="text-xs px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-i18n="clear" data-i18n-title="clearTitle">
           Clear
         </button>
-        <button onclick="saveToHistory()" class="text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors" title="Save current prompt to history">
+        <button onclick="saveToHistory()" class="text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors" data-i18n="save" data-i18n-title="saveTitle">
           Save
         </button>
-        <button onclick="toggleHistory()" class="relative text-xs px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="View history">
+        <button onclick="toggleHistory()" class="relative text-xs px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-i18n="history" data-i18n-title="historyTitle">
           History
           <span id="historyBadge" class="hidden absolute -top-1.5 -right-1.5 w-4 h-4 text-[10px] leading-4 text-center bg-indigo-600 text-white rounded-full"></span>
         </button>
         <!-- Mobile prompt toggle -->
-        <button onclick="toggleMobilePanel()" class="lg:hidden text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
+        <button onclick="toggleMobilePanel()" class="lg:hidden text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors" data-i18n="prompt">
           Prompt
         </button>
       </div>
@@ -76,20 +81,20 @@
         <section class="fade-in">
           <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
             <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">1</span>
-            Project Context
+            <span data-i18n="sec_projectContext">Project Context</span>
           </h2>
           <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
             <div>
-              <label for="problemStatement" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Problem Statement</label>
-              <textarea id="problemStatement" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="What pain point does this solve?"></textarea>
+              <label for="problemStatement" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_problemStatement">Problem Statement</label>
+              <textarea id="problemStatement" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_problemStatement" placeholder="What pain point does this solve?"></textarea>
             </div>
             <div>
-              <label for="targetUsers" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Target Users</label>
-              <input type="text" id="targetUsers" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Who will use this?">
+              <label for="targetUsers" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_targetUsers">Target Users</label>
+              <input type="text" id="targetUsers" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_targetUsers" placeholder="Who will use this?">
             </div>
             <div>
-              <label for="coreValueProp" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Core Value Proposition</label>
-              <textarea id="coreValueProp" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Why this solution?"></textarea>
+              <label for="coreValueProp" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_coreValueProp">Core Value Proposition</label>
+              <textarea id="coreValueProp" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_coreValueProp" placeholder="Why this solution?"></textarea>
             </div>
           </div>
         </section>
@@ -98,24 +103,24 @@
         <section class="fade-in">
           <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
             <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">2</span>
-            Technical Specifications
+            <span data-i18n="sec_technicalSpecs">Technical Specifications</span>
           </h2>
           <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
             <div>
-              <label for="platform" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Platform</label>
-              <input type="text" id="platform" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Web / Mobile / Desktop / CLI">
+              <label for="platform" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_platform">Platform</label>
+              <input type="text" id="platform" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_platform" placeholder="Web / Mobile / Desktop / CLI">
             </div>
             <div>
-              <label for="stackPreference" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Stack Preference</label>
-              <input type="text" id="stackPreference" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Languages, frameworks, databases">
+              <label for="stackPreference" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_stackPreference">Stack Preference</label>
+              <input type="text" id="stackPreference" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_stackPreference" placeholder="Languages, frameworks, databases">
             </div>
             <div>
-              <label for="scaleExpectations" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Scale Expectations</label>
-              <textarea id="scaleExpectations" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Users, data volume, performance needs"></textarea>
+              <label for="scaleExpectations" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_scaleExpectations">Scale Expectations</label>
+              <textarea id="scaleExpectations" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_scaleExpectations" placeholder="Users, data volume, performance needs"></textarea>
             </div>
             <div>
-              <label for="integrationPoints" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Integration Points</label>
-              <textarea id="integrationPoints" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="External APIs, services, databases"></textarea>
+              <label for="integrationPoints" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_integrationPoints">Integration Points</label>
+              <textarea id="integrationPoints" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_integrationPoints" placeholder="External APIs, services, databases"></textarea>
             </div>
           </div>
         </section>
@@ -124,16 +129,16 @@
         <section class="fade-in">
           <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
             <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">3</span>
-            Functional Requirements
+            <span data-i18n="sec_functionalReqs">Functional Requirements</span>
           </h2>
           <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
             <div>
-              <label for="mvpFeatures" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">MVP Features</label>
-              <textarea id="mvpFeatures" rows="4" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="List essential features with user stories (one per line)"></textarea>
+              <label for="mvpFeatures" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_mvpFeatures">MVP Features</label>
+              <textarea id="mvpFeatures" rows="4" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_mvpFeatures" placeholder="List essential features with user stories (one per line)"></textarea>
             </div>
             <div>
-              <label for="futureEnhancements" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Future Enhancements</label>
-              <textarea id="futureEnhancements" rows="3" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Nice-to-have features for later iterations"></textarea>
+              <label for="futureEnhancements" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_futureEnhancements">Future Enhancements</label>
+              <textarea id="futureEnhancements" rows="3" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_futureEnhancements" placeholder="Nice-to-have features for later iterations"></textarea>
             </div>
           </div>
         </section>
@@ -142,20 +147,20 @@
         <section class="fade-in">
           <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
             <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">4</span>
-            User Experience
+            <span data-i18n="sec_userExperience">User Experience</span>
           </h2>
           <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
             <div>
-              <label for="keyUserFlows" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Key User Flows</label>
-              <textarea id="keyUserFlows" rows="3" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Describe 2-3 primary user interactions"></textarea>
+              <label for="keyUserFlows" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_keyUserFlows">Key User Flows</label>
+              <textarea id="keyUserFlows" rows="3" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_keyUserFlows" placeholder="Describe 2-3 primary user interactions"></textarea>
             </div>
             <div>
-              <label for="uiStyle" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">UI Style</label>
-              <input type="text" id="uiStyle" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Minimalist / feature-rich, design references">
+              <label for="uiStyle" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_uiStyle">UI Style</label>
+              <input type="text" id="uiStyle" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_uiStyle" placeholder="Minimalist / feature-rich, design references">
             </div>
             <div>
-              <label for="accessibility" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Accessibility</label>
-              <textarea id="accessibility" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Requirements for a11y compliance"></textarea>
+              <label for="accessibility" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_accessibility">Accessibility</label>
+              <textarea id="accessibility" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_accessibility" placeholder="Requirements for a11y compliance"></textarea>
             </div>
           </div>
         </section>
@@ -164,20 +169,20 @@
         <section class="fade-in">
           <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
             <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">5</span>
-            Technical Constraints
+            <span data-i18n="sec_technicalConstraints">Technical Constraints</span>
           </h2>
           <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
             <div>
-              <label for="mustWorkWith" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Must Work With</label>
-              <textarea id="mustWorkWith" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Existing systems, APIs, infrastructure"></textarea>
+              <label for="mustWorkWith" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_mustWorkWith">Must Work With</label>
+              <textarea id="mustWorkWith" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_mustWorkWith" placeholder="Existing systems, APIs, infrastructure"></textarea>
             </div>
             <div>
-              <label for="performanceTargets" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Performance Targets</label>
-              <textarea id="performanceTargets" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Response times, load capacity"></textarea>
+              <label for="performanceTargets" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_performanceTargets">Performance Targets</label>
+              <textarea id="performanceTargets" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_performanceTargets" placeholder="Response times, load capacity"></textarea>
             </div>
             <div>
-              <label for="securityRequirements" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Security Requirements</label>
-              <textarea id="securityRequirements" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Auth, data protection, compliance"></textarea>
+              <label for="securityRequirements" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_securityRequirements">Security Requirements</label>
+              <textarea id="securityRequirements" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_securityRequirements" placeholder="Auth, data protection, compliance"></textarea>
             </div>
           </div>
         </section>
@@ -186,20 +191,20 @@
         <section class="fade-in">
           <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
             <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">6</span>
-            Success Criteria
+            <span data-i18n="sec_successCriteria">Success Criteria</span>
           </h2>
           <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
             <div>
-              <label for="deliverableFormat" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Deliverable Format</label>
-              <textarea id="deliverableFormat" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Repo structure, documentation expectations"></textarea>
+              <label for="deliverableFormat" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_deliverableFormat">Deliverable Format</label>
+              <textarea id="deliverableFormat" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_deliverableFormat" placeholder="Repo structure, documentation expectations"></textarea>
             </div>
             <div>
-              <label for="qualityStandards" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Quality Standards</label>
-              <textarea id="qualityStandards" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Testing, code style, documentation"></textarea>
+              <label for="qualityStandards" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_qualityStandards">Quality Standards</label>
+              <textarea id="qualityStandards" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_qualityStandards" placeholder="Testing, code style, documentation"></textarea>
             </div>
             <div>
-              <label for="deployment" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Deployment</label>
-              <textarea id="deployment" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="How and where should it run?"></textarea>
+              <label for="deployment" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_deployment">Deployment</label>
+              <textarea id="deployment" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_deployment" placeholder="How and where should it run?"></textarea>
             </div>
           </div>
         </section>
@@ -208,12 +213,12 @@
         <section class="fade-in">
           <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
             <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">7</span>
-            Reference Examples
+            <span data-i18n="sec_referenceExamples">Reference Examples</span>
           </h2>
           <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
             <div>
-              <label for="referenceExamples" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Analogies &amp; Inspirations</label>
-              <textarea id="referenceExamples" rows="3" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder='e.g. "Think of it like Notion combined with the collaboration features from Figma"'></textarea>
+              <label for="referenceExamples" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1" data-i18n="lbl_referenceExamples">Analogies &amp; Inspirations</label>
+              <textarea id="referenceExamples" rows="3" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" data-i18n-placeholder="ph_referenceExamples" placeholder='e.g. "Think of it like Notion combined with the collaboration features from Figma"'></textarea>
             </div>
           </div>
         </section>
@@ -225,17 +230,17 @@
     <!-- Side Panel (Desktop) -->
     <aside id="sidePanel" class="no-print hidden lg:flex flex-col w-[420px] xl:w-[480px] shrink-0 border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-14 h-[calc(100vh-3.5rem)]">
       <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800">
-        <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Generated Prompt</h2>
+        <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-300" data-i18n="generatedPrompt">Generated Prompt</h2>
         <button onclick="copyPrompt()" id="copyBtn" class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
           <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/></svg>
-          <span id="copyBtnText">Copy</span>
+          <span id="copyBtnText" data-i18n="copy">Copy</span>
         </button>
       </div>
       <div id="promptOutput" class="flex-1 overflow-y-auto p-4 scrollbar-thin">
         <div id="promptEmpty" class="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-600 text-center px-8">
           <svg class="w-12 h-12 mb-3 opacity-50" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
-          <p class="text-sm">Fill in the form to generate your prompt</p>
-          <p class="text-xs mt-1 opacity-70">Only completed fields will appear</p>
+          <p class="text-sm" data-i18n="emptyPrompt">Fill in the form to generate your prompt</p>
+          <p class="text-xs mt-1 opacity-70" data-i18n="emptyPromptSub">Only completed fields will appear</p>
         </div>
         <pre id="promptText" class="hidden whitespace-pre-wrap text-sm leading-relaxed font-mono text-gray-700 dark:text-gray-300"></pre>
       </div>
@@ -247,11 +252,11 @@
     <div class="absolute inset-0 bg-black/40" onclick="toggleMobilePanel()"></div>
     <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl slide-in flex flex-col">
       <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800">
-        <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Generated Prompt</h2>
+        <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-300" data-i18n="generatedPrompt">Generated Prompt</h2>
         <div class="flex items-center gap-2">
           <button onclick="copyPrompt()" id="copyBtnMobile" class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
             <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/></svg>
-            <span id="copyBtnMobileText">Copy</span>
+            <span id="copyBtnMobileText" data-i18n="copy">Copy</span>
           </button>
           <button onclick="toggleMobilePanel()" class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
             <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
@@ -260,7 +265,7 @@
       </div>
       <div id="mobilePromptOutput" class="flex-1 overflow-y-auto p-4 scrollbar-thin">
         <div id="mobilePromptEmpty" class="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-600 text-center px-8">
-          <p class="text-sm">Fill in the form to generate your prompt</p>
+          <p class="text-sm" data-i18n="emptyPrompt">Fill in the form to generate your prompt</p>
         </div>
         <pre id="mobilePromptText" class="hidden whitespace-pre-wrap text-sm leading-relaxed font-mono text-gray-700 dark:text-gray-300"></pre>
       </div>
@@ -272,7 +277,7 @@
     <div class="absolute inset-0 bg-black/40" onclick="toggleHistory()"></div>
     <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg max-h-[80vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col fade-in border border-gray-200 dark:border-gray-800">
       <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800">
-        <h2 class="text-sm font-semibold">Saved Prompts</h2>
+        <h2 class="text-sm font-semibold" data-i18n="savedPrompts">Saved Prompts</h2>
         <button onclick="toggleHistory()" class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
         </button>
@@ -282,79 +287,349 @@
   </div>
 
   <script>
+    // ── Translations ───────────────────────────────────────────────────
+    const I18N = {
+      en: {
+        // Header
+        appTitle: 'AI Prompt Engineer',
+        clear: 'Clear',
+        clearTitle: 'Clear all fields',
+        save: 'Save',
+        saveTitle: 'Save current prompt to history',
+        history: 'History',
+        historyTitle: 'View history',
+        prompt: 'Prompt',
+
+        // Section headings
+        sec_projectContext: 'Project Context',
+        sec_technicalSpecs: 'Technical Specifications',
+        sec_functionalReqs: 'Functional Requirements',
+        sec_userExperience: 'User Experience',
+        sec_technicalConstraints: 'Technical Constraints',
+        sec_successCriteria: 'Success Criteria',
+        sec_referenceExamples: 'Reference Examples',
+
+        // Field labels
+        lbl_problemStatement: 'Problem Statement',
+        lbl_targetUsers: 'Target Users',
+        lbl_coreValueProp: 'Core Value Proposition',
+        lbl_platform: 'Platform',
+        lbl_stackPreference: 'Stack Preference',
+        lbl_scaleExpectations: 'Scale Expectations',
+        lbl_integrationPoints: 'Integration Points',
+        lbl_mvpFeatures: 'MVP Features',
+        lbl_futureEnhancements: 'Future Enhancements',
+        lbl_keyUserFlows: 'Key User Flows',
+        lbl_uiStyle: 'UI Style',
+        lbl_accessibility: 'Accessibility',
+        lbl_mustWorkWith: 'Must Work With',
+        lbl_performanceTargets: 'Performance Targets',
+        lbl_securityRequirements: 'Security Requirements',
+        lbl_deliverableFormat: 'Deliverable Format',
+        lbl_qualityStandards: 'Quality Standards',
+        lbl_deployment: 'Deployment',
+        lbl_referenceExamples: 'Analogies & Inspirations',
+
+        // Placeholders
+        ph_problemStatement: 'What pain point does this solve?',
+        ph_targetUsers: 'Who will use this?',
+        ph_coreValueProp: 'Why this solution?',
+        ph_platform: 'Web / Mobile / Desktop / CLI',
+        ph_stackPreference: 'Languages, frameworks, databases',
+        ph_scaleExpectations: 'Users, data volume, performance needs',
+        ph_integrationPoints: 'External APIs, services, databases',
+        ph_mvpFeatures: 'List essential features with user stories (one per line)',
+        ph_futureEnhancements: 'Nice-to-have features for later iterations',
+        ph_keyUserFlows: 'Describe 2-3 primary user interactions',
+        ph_uiStyle: 'Minimalist / feature-rich, design references',
+        ph_accessibility: 'Requirements for a11y compliance',
+        ph_mustWorkWith: 'Existing systems, APIs, infrastructure',
+        ph_performanceTargets: 'Response times, load capacity',
+        ph_securityRequirements: 'Auth, data protection, compliance',
+        ph_deliverableFormat: 'Repo structure, documentation expectations',
+        ph_qualityStandards: 'Testing, code style, documentation',
+        ph_deployment: 'How and where should it run?',
+        ph_referenceExamples: 'e.g. "Think of it like Notion combined with the collaboration features from Figma"',
+
+        // Side panel
+        generatedPrompt: 'Generated Prompt',
+        copy: 'Copy',
+        copied: 'Copied!',
+        failed: 'Failed',
+
+        // Empty states
+        emptyPrompt: 'Fill in the form to generate your prompt',
+        emptyPromptSub: 'Only completed fields will appear',
+
+        // History
+        savedPrompts: 'Saved Prompts',
+        noSavedPrompts: 'No saved prompts yet',
+        noSavedPromptsSub: 'Click "Save" to store your current prompt',
+        deleteTitle: 'Delete',
+
+        // Confirm
+        clearConfirm: 'Clear all fields? This cannot be undone.',
+
+        // Prompt output text
+        promptIntro: 'I want to build a new software project. Here are the detailed specifications:',
+        promptOutro: 'Please help me build this project from scratch. Provide a complete implementation plan including:\n1. Architecture overview and key design decisions\n2. Recommended project structure\n3. Step-by-step implementation guide\n4. Full working code for the MVP features\n5. Setup and deployment instructions',
+
+        // Prompt section titles
+        prompt_projectContext: 'PROJECT CONTEXT',
+        prompt_technicalSpecs: 'TECHNICAL SPECIFICATIONS',
+        prompt_functionalReqs: 'FUNCTIONAL REQUIREMENTS',
+        prompt_userExperience: 'USER EXPERIENCE',
+        prompt_technicalConstraints: 'TECHNICAL CONSTRAINTS',
+        prompt_successCriteria: 'SUCCESS CRITERIA',
+        prompt_referenceExamples: 'REFERENCE EXAMPLES',
+
+        // Prompt field labels
+        prompt_problemStatement: 'Problem Statement',
+        prompt_targetUsers: 'Target Users',
+        prompt_coreValueProp: 'Core Value Proposition',
+        prompt_platform: 'Platform',
+        prompt_stackPreference: 'Stack Preference',
+        prompt_scaleExpectations: 'Scale Expectations',
+        prompt_integrationPoints: 'Integration Points',
+        prompt_mvpFeatures: 'MVP Features',
+        prompt_futureEnhancements: 'Future Enhancements',
+        prompt_keyUserFlows: 'Key User Flows',
+        prompt_uiStyle: 'UI Style',
+        prompt_accessibility: 'Accessibility',
+        prompt_mustWorkWith: 'Must Work With',
+        prompt_performanceTargets: 'Performance Targets',
+        prompt_securityRequirements: 'Security Requirements',
+        prompt_deliverableFormat: 'Deliverable Format',
+        prompt_qualityStandards: 'Quality Standards',
+        prompt_deployment: 'Deployment',
+        prompt_referenceExamples: 'Analogies & Inspirations',
+      },
+
+      es: {
+        // Header
+        appTitle: 'AI Prompt Engineer',
+        clear: 'Limpiar',
+        clearTitle: 'Limpiar todos los campos',
+        save: 'Guardar',
+        saveTitle: 'Guardar el prompt actual en el historial',
+        history: 'Historial',
+        historyTitle: 'Ver historial',
+        prompt: 'Prompt',
+
+        // Section headings
+        sec_projectContext: 'Contexto del Proyecto',
+        sec_technicalSpecs: 'Especificaciones Técnicas',
+        sec_functionalReqs: 'Requisitos Funcionales',
+        sec_userExperience: 'Experiencia de Usuario',
+        sec_technicalConstraints: 'Restricciones Técnicas',
+        sec_successCriteria: 'Criterios de Éxito',
+        sec_referenceExamples: 'Ejemplos de Referencia',
+
+        // Field labels
+        lbl_problemStatement: 'Problema a Resolver',
+        lbl_targetUsers: 'Usuarios Objetivo',
+        lbl_coreValueProp: 'Propuesta de Valor',
+        lbl_platform: 'Plataforma',
+        lbl_stackPreference: 'Stack Preferido',
+        lbl_scaleExpectations: 'Expectativas de Escala',
+        lbl_integrationPoints: 'Puntos de Integración',
+        lbl_mvpFeatures: 'Funcionalidades MVP',
+        lbl_futureEnhancements: 'Mejoras Futuras',
+        lbl_keyUserFlows: 'Flujos de Usuario Clave',
+        lbl_uiStyle: 'Estilo de UI',
+        lbl_accessibility: 'Accesibilidad',
+        lbl_mustWorkWith: 'Debe Funcionar Con',
+        lbl_performanceTargets: 'Objetivos de Rendimiento',
+        lbl_securityRequirements: 'Requisitos de Seguridad',
+        lbl_deliverableFormat: 'Formato de Entrega',
+        lbl_qualityStandards: 'Estándares de Calidad',
+        lbl_deployment: 'Despliegue',
+        lbl_referenceExamples: 'Analogías e Inspiraciones',
+
+        // Placeholders
+        ph_problemStatement: '¿Qué problema resuelve?',
+        ph_targetUsers: '¿Quién lo usará?',
+        ph_coreValueProp: '¿Por qué esta solución?',
+        ph_platform: 'Web / Móvil / Escritorio / CLI',
+        ph_stackPreference: 'Lenguajes, frameworks, bases de datos',
+        ph_scaleExpectations: 'Usuarios, volumen de datos, rendimiento',
+        ph_integrationPoints: 'APIs externas, servicios, bases de datos',
+        ph_mvpFeatures: 'Lista de funcionalidades esenciales con historias de usuario (una por línea)',
+        ph_futureEnhancements: 'Funcionalidades deseables para futuras iteraciones',
+        ph_keyUserFlows: 'Describe 2-3 interacciones principales del usuario',
+        ph_uiStyle: 'Minimalista / rico en funciones, referencias de diseño',
+        ph_accessibility: 'Requisitos de accesibilidad (a11y)',
+        ph_mustWorkWith: 'Sistemas existentes, APIs, infraestructura',
+        ph_performanceTargets: 'Tiempos de respuesta, capacidad de carga',
+        ph_securityRequirements: 'Autenticación, protección de datos, cumplimiento',
+        ph_deliverableFormat: 'Estructura del repositorio, documentación',
+        ph_qualityStandards: 'Testing, estilo de código, documentación',
+        ph_deployment: '¿Cómo y dónde debe ejecutarse?',
+        ph_referenceExamples: 'ej. "Piensa en algo como Notion combinado con las funciones de colaboración de Figma"',
+
+        // Side panel
+        generatedPrompt: 'Prompt Generado',
+        copy: 'Copiar',
+        copied: '¡Copiado!',
+        failed: 'Error',
+
+        // Empty states
+        emptyPrompt: 'Completa el formulario para generar tu prompt',
+        emptyPromptSub: 'Solo aparecerán los campos completados',
+
+        // History
+        savedPrompts: 'Prompts Guardados',
+        noSavedPrompts: 'No hay prompts guardados',
+        noSavedPromptsSub: 'Haz clic en "Guardar" para almacenar tu prompt actual',
+        deleteTitle: 'Eliminar',
+
+        // Confirm
+        clearConfirm: '¿Limpiar todos los campos? Esta acción no se puede deshacer.',
+
+        // Prompt output text
+        promptIntro: 'Quiero construir un nuevo proyecto de software. Estas son las especificaciones detalladas:',
+        promptOutro: 'Por favor, ayúdame a construir este proyecto desde cero. Proporciona un plan de implementación completo que incluya:\n1. Visión general de la arquitectura y decisiones de diseño clave\n2. Estructura de proyecto recomendada\n3. Guía de implementación paso a paso\n4. Código funcional completo para las funcionalidades MVP\n5. Instrucciones de configuración y despliegue',
+
+        // Prompt section titles
+        prompt_projectContext: 'CONTEXTO DEL PROYECTO',
+        prompt_technicalSpecs: 'ESPECIFICACIONES TÉCNICAS',
+        prompt_functionalReqs: 'REQUISITOS FUNCIONALES',
+        prompt_userExperience: 'EXPERIENCIA DE USUARIO',
+        prompt_technicalConstraints: 'RESTRICCIONES TÉCNICAS',
+        prompt_successCriteria: 'CRITERIOS DE ÉXITO',
+        prompt_referenceExamples: 'EJEMPLOS DE REFERENCIA',
+
+        // Prompt field labels
+        prompt_problemStatement: 'Problema a Resolver',
+        prompt_targetUsers: 'Usuarios Objetivo',
+        prompt_coreValueProp: 'Propuesta de Valor',
+        prompt_platform: 'Plataforma',
+        prompt_stackPreference: 'Stack Preferido',
+        prompt_scaleExpectations: 'Expectativas de Escala',
+        prompt_integrationPoints: 'Puntos de Integración',
+        prompt_mvpFeatures: 'Funcionalidades MVP',
+        prompt_futureEnhancements: 'Mejoras Futuras',
+        prompt_keyUserFlows: 'Flujos de Usuario Clave',
+        prompt_uiStyle: 'Estilo de UI',
+        prompt_accessibility: 'Accesibilidad',
+        prompt_mustWorkWith: 'Debe Funcionar Con',
+        prompt_performanceTargets: 'Objetivos de Rendimiento',
+        prompt_securityRequirements: 'Requisitos de Seguridad',
+        prompt_deliverableFormat: 'Formato de Entrega',
+        prompt_qualityStandards: 'Estándares de Calidad',
+        prompt_deployment: 'Despliegue',
+        prompt_referenceExamples: 'Analogías e Inspiraciones',
+      }
+    };
+
     // ── Field Definitions ──────────────────────────────────────────────
     const SECTIONS = [
       {
         key: 'projectContext',
-        title: 'PROJECT CONTEXT',
         fields: [
-          { id: 'problemStatement', label: 'Problem Statement' },
-          { id: 'targetUsers', label: 'Target Users' },
-          { id: 'coreValueProp', label: 'Core Value Proposition' },
+          { id: 'problemStatement', multiline: false },
+          { id: 'targetUsers', multiline: false },
+          { id: 'coreValueProp', multiline: false },
         ]
       },
       {
         key: 'technicalSpecs',
-        title: 'TECHNICAL SPECIFICATIONS',
         fields: [
-          { id: 'platform', label: 'Platform' },
-          { id: 'stackPreference', label: 'Stack Preference' },
-          { id: 'scaleExpectations', label: 'Scale Expectations' },
-          { id: 'integrationPoints', label: 'Integration Points' },
+          { id: 'platform', multiline: false },
+          { id: 'stackPreference', multiline: false },
+          { id: 'scaleExpectations', multiline: false },
+          { id: 'integrationPoints', multiline: false },
         ]
       },
       {
         key: 'functionalReqs',
-        title: 'FUNCTIONAL REQUIREMENTS',
         fields: [
-          { id: 'mvpFeatures', label: 'MVP Features', multiline: true },
-          { id: 'futureEnhancements', label: 'Future Enhancements', multiline: true },
+          { id: 'mvpFeatures', multiline: true },
+          { id: 'futureEnhancements', multiline: true },
         ]
       },
       {
         key: 'userExperience',
-        title: 'USER EXPERIENCE',
         fields: [
-          { id: 'keyUserFlows', label: 'Key User Flows' },
-          { id: 'uiStyle', label: 'UI Style' },
-          { id: 'accessibility', label: 'Accessibility' },
+          { id: 'keyUserFlows', multiline: false },
+          { id: 'uiStyle', multiline: false },
+          { id: 'accessibility', multiline: false },
         ]
       },
       {
         key: 'technicalConstraints',
-        title: 'TECHNICAL CONSTRAINTS',
         fields: [
-          { id: 'mustWorkWith', label: 'Must Work With' },
-          { id: 'performanceTargets', label: 'Performance Targets' },
-          { id: 'securityRequirements', label: 'Security Requirements' },
+          { id: 'mustWorkWith', multiline: false },
+          { id: 'performanceTargets', multiline: false },
+          { id: 'securityRequirements', multiline: false },
         ]
       },
       {
         key: 'successCriteria',
-        title: 'SUCCESS CRITERIA',
         fields: [
-          { id: 'deliverableFormat', label: 'Deliverable Format' },
-          { id: 'qualityStandards', label: 'Quality Standards' },
-          { id: 'deployment', label: 'Deployment' },
+          { id: 'deliverableFormat', multiline: false },
+          { id: 'qualityStandards', multiline: false },
+          { id: 'deployment', multiline: false },
         ]
       },
       {
         key: 'referenceExamples',
-        title: 'REFERENCE EXAMPLES',
         fields: [
-          { id: 'referenceExamples', label: 'Analogies & Inspirations' },
+          { id: 'referenceExamples', multiline: false },
         ]
       },
     ];
 
     const STORAGE_KEY = 'aiPromptEngineer_draft';
     const HISTORY_KEY = 'aiPromptEngineer_history';
+    const LANG_KEY = 'aiPromptEngineer_lang';
 
     // ── State ──────────────────────────────────────────────────────────
     let saveTimeout = null;
+    let currentLang = 'en';
+
+    // ── i18n helpers ───────────────────────────────────────────────────
+    function t(key) {
+      return (I18N[currentLang] && I18N[currentLang][key]) || I18N.en[key] || key;
+    }
+
+    function setLanguage(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      localStorage.setItem(LANG_KEY, lang);
+      document.getElementById('langSelector').value = lang;
+      applyLanguage();
+      updatePrompt();
+    }
+
+    function applyLanguage() {
+      // Update all elements with data-i18n (text content)
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        el.textContent = t(el.getAttribute('data-i18n'));
+      });
+      // Update all elements with data-i18n-placeholder
+      document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+        el.placeholder = t(el.getAttribute('data-i18n-placeholder'));
+      });
+      // Update all elements with data-i18n-title
+      document.querySelectorAll('[data-i18n-title]').forEach(el => {
+        el.title = t(el.getAttribute('data-i18n-title'));
+      });
+      // Update page title
+      document.title = t('appTitle');
+    }
 
     // ── Init ───────────────────────────────────────────────────────────
     function init() {
+      // Load language preference
+      const savedLang = localStorage.getItem(LANG_KEY);
+      if (savedLang && I18N[savedLang]) {
+        currentLang = savedLang;
+      }
+      document.getElementById('langSelector').value = currentLang;
+      document.documentElement.lang = currentLang;
+      applyLanguage();
+
       loadDraft();
       updatePrompt();
       updateHistoryBadge();
@@ -383,46 +658,47 @@
       const v = getFieldValues();
       const parts = [];
 
-      parts.push('I want to build a new software project. Here are the detailed specifications:\n');
+      parts.push(t('promptIntro') + '\n');
 
       for (const section of SECTIONS) {
         const lines = [];
+        const sectionTitle = t('prompt_' + section.key);
 
         for (const field of section.fields) {
           const val = v[field.id];
           if (!val) continue;
+          const fieldLabel = t('prompt_' + field.id);
 
           if (field.multiline) {
-            // For multiline fields, format each line as a numbered/bulleted item
             const fieldLines = val.split('\n').filter(l => l.trim());
-            if (section.key === 'functionalReqs' && field.id === 'mvpFeatures') {
-              lines.push(`${field.label}:`);
+            if (field.id === 'mvpFeatures') {
+              lines.push(`${fieldLabel}:`);
               fieldLines.forEach((l, i) => {
                 const cleaned = l.replace(/^\d+[\.\)]\s*/, '').replace(/^[-*]\s*/, '');
                 lines.push(`  ${i + 1}. ${cleaned}`);
               });
             } else if (field.id === 'futureEnhancements') {
-              lines.push(`${field.label}:`);
+              lines.push(`${fieldLabel}:`);
               fieldLines.forEach(l => {
                 const cleaned = l.replace(/^[-*]\s*/, '');
                 lines.push(`  - ${cleaned}`);
               });
             } else {
-              lines.push(`- ${field.label}: ${val}`);
+              lines.push(`- ${fieldLabel}: ${val}`);
             }
           } else {
-            lines.push(`- ${field.label}: ${val}`);
+            lines.push(`- ${fieldLabel}: ${val}`);
           }
         }
 
         if (lines.length > 0) {
-          parts.push(`${section.title}:\n${lines.join('\n')}`);
+          parts.push(`${sectionTitle}:\n${lines.join('\n')}`);
         }
       }
 
       if (parts.length <= 1) return '';
 
-      parts.push('Please help me build this project from scratch. Provide a complete implementation plan including:\n1. Architecture overview and key design decisions\n2. Recommended project structure\n3. Step-by-step implementation guide\n4. Full working code for the MVP features\n5. Setup and deployment instructions');
+      parts.push(t('promptOutro'));
 
       return parts.join('\n\n');
     }
@@ -430,10 +706,8 @@
     function updatePrompt() {
       const prompt = generatePrompt();
 
-      // Desktop
       const textEl = document.getElementById('promptText');
       const emptyEl = document.getElementById('promptEmpty');
-      // Mobile
       const mTextEl = document.getElementById('mobilePromptText');
       const mEmptyEl = document.getElementById('mobilePromptEmpty');
 
@@ -461,7 +735,6 @@
         await navigator.clipboard.writeText(prompt);
         showCopyFeedback(true);
       } catch {
-        // Fallback
         const ta = document.createElement('textarea');
         ta.value = prompt;
         ta.style.position = 'fixed';
@@ -482,14 +755,14 @@
         const el = document.getElementById(id);
         const container = document.getElementById(containers[i]);
         if (!el) return;
-        el.textContent = success ? 'Copied!' : 'Failed';
+        el.textContent = success ? t('copied') : t('failed');
         container.classList.add('copy-flash');
         if (success) {
           container.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
           container.classList.add('bg-green-600', 'hover:bg-green-700');
         }
         setTimeout(() => {
-          el.textContent = 'Copy';
+          el.textContent = t('copy');
           container.classList.remove('copy-flash', 'bg-green-600', 'hover:bg-green-700');
           container.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
         }, 1500);
@@ -549,7 +822,6 @@
 
       const history = getHistory();
       history.unshift(entry);
-      // Keep last 50
       if (history.length > 50) history.length = 50;
       saveHistory(history);
       renderHistory();
@@ -560,7 +832,6 @@
       const entry = history.find(h => h.id === id);
       if (!entry) return;
 
-      // Clear all fields first
       document.querySelectorAll('.field').forEach(el => el.value = '');
 
       for (const [fieldId, val] of Object.entries(entry.fields)) {
@@ -599,27 +870,27 @@
         list.innerHTML = `
           <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-600">
             <svg class="w-10 h-10 mb-2 opacity-50" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
-            <p class="text-sm">No saved prompts yet</p>
-            <p class="text-xs mt-1 opacity-70">Click "Save" to store your current prompt</p>
+            <p class="text-sm">${escapeHtml(t('noSavedPrompts'))}</p>
+            <p class="text-xs mt-1 opacity-70">${escapeHtml(t('noSavedPromptsSub'))}</p>
           </div>`;
         return;
       }
 
       list.innerHTML = history.map(entry => {
         const date = new Date(entry.timestamp);
-        const dateStr = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-        const timeStr = date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+        const dateStr = date.toLocaleDateString(currentLang === 'es' ? 'es-ES' : undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+        const timeStr = date.toLocaleTimeString(currentLang === 'es' ? 'es-ES' : undefined, { hour: '2-digit', minute: '2-digit' });
 
         return `
           <div onclick="loadFromHistory(${entry.id})"
                class="group flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors mb-1">
             <div class="flex-1 min-w-0">
               <p class="text-sm font-medium truncate">${escapeHtml(entry.name)}</p>
-              <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">${dateStr} at ${timeStr}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">${dateStr} · ${timeStr}</p>
             </div>
             <button onclick="deleteFromHistory(${entry.id}, event)"
                     class="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 transition-all shrink-0"
-                    title="Delete">
+                    title="${escapeHtml(t('deleteTitle'))}">
               <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
             </button>
           </div>`;
@@ -646,7 +917,7 @@
 
     // ── Clear Form ─────────────────────────────────────────────────────
     function clearForm() {
-      if (!confirm('Clear all fields? This cannot be undone.')) return;
+      if (!confirm(t('clearConfirm'))) return;
       document.querySelectorAll('.field').forEach(el => el.value = '');
       updatePrompt();
       saveDraft();
