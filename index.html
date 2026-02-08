@@ -49,8 +49,8 @@
       <div class="flex items-center gap-2">
         <!-- Language Selector -->
         <select id="langSelector" onchange="setLanguage(this.value)" class="text-xs px-2 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500">
-          <option value="en">EN</option>
-          <option value="es">ES</option>
+          <option value="en">🇺🇸 English</option>
+          <option value="es">🇪🇸 Español</option>
         </select>
         <button onclick="clearForm()" class="text-xs px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-i18n="clear" data-i18n-title="clearTitle">
           Clear
@@ -58,8 +58,8 @@
         <button onclick="saveToHistory()" class="text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors" data-i18n="save" data-i18n-title="saveTitle">
           Save
         </button>
-        <button onclick="toggleHistory()" class="relative text-xs px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-i18n="history" data-i18n-title="historyTitle">
-          History
+        <button onclick="toggleHistory()" class="relative text-xs px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" data-i18n-title="historyTitle">
+          <span data-i18n="history">History</span>
           <span id="historyBadge" class="hidden absolute -top-1.5 -right-1.5 w-4 h-4 text-[10px] leading-4 text-center bg-indigo-600 text-white rounded-full"></span>
         </button>
         <!-- Mobile prompt toggle -->
