@@ -1,0 +1,666 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Prompt Engineer</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'media',
+      theme: {
+        extend: {
+          colors: {
+            accent: { 500: '#6366f1', 600: '#4f46e5', 700: '#4338ca' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    .scrollbar-thin { scrollbar-width: thin; }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-track { background: transparent; }
+    .scrollbar-thin::-webkit-scrollbar-thumb { background: #a1a1aa; border-radius: 3px; }
+    .dark .scrollbar-thin::-webkit-scrollbar-thumb { background: #52525b; }
+    textarea { resize: vertical; min-height: 2.5rem; }
+    .fade-in { animation: fadeIn 0.15s ease-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
+    .slide-in { animation: slideIn 0.2s ease-out; }
+    @keyframes slideIn { from { transform: translateX(100%); } to { transform: translateX(0); } }
+    .copy-flash { animation: flash 0.4s ease-out; }
+    @keyframes flash { 0% { background-color: #22c55e; color: white; } 100% {} }
+    @media print { .no-print { display: none !important; } }
+  </style>
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-800 dark:text-gray-200 min-h-screen flex flex-col">
+
+  <!-- Header -->
+  <header class="no-print sticky top-0 z-40 bg-white/80 dark:bg-gray-900/80 backdrop-blur-md border-b border-gray-200 dark:border-gray-800">
+    <div class="max-w-screen-2xl mx-auto px-4 sm:px-6 h-14 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center">
+          <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.455 2.456L21.75 6l-1.036.259a3.375 3.375 0 0 0-2.455 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z"/></svg>
+        </div>
+        <h1 class="text-lg font-semibold tracking-tight">AI Prompt Engineer</h1>
+      </div>
+      <div class="flex items-center gap-2">
+        <button onclick="clearForm()" class="text-xs px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="Clear all fields">
+          Clear
+        </button>
+        <button onclick="saveToHistory()" class="text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors" title="Save current prompt to history">
+          Save
+        </button>
+        <button onclick="toggleHistory()" class="relative text-xs px-3 py-1.5 rounded-md border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors" title="View history">
+          History
+          <span id="historyBadge" class="hidden absolute -top-1.5 -right-1.5 w-4 h-4 text-[10px] leading-4 text-center bg-indigo-600 text-white rounded-full"></span>
+        </button>
+        <!-- Mobile prompt toggle -->
+        <button onclick="toggleMobilePanel()" class="lg:hidden text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
+          Prompt
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <div class="flex-1 flex max-w-screen-2xl mx-auto w-full">
+
+    <!-- Form Panel -->
+    <main class="flex-1 overflow-y-auto p-4 sm:p-6 lg:pr-3 scrollbar-thin">
+      <div class="max-w-2xl mx-auto lg:mx-0 space-y-6">
+
+        <!-- Project Context -->
+        <section class="fade-in">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">1</span>
+            Project Context
+          </h2>
+          <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+            <div>
+              <label for="problemStatement" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Problem Statement</label>
+              <textarea id="problemStatement" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="What pain point does this solve?"></textarea>
+            </div>
+            <div>
+              <label for="targetUsers" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Target Users</label>
+              <input type="text" id="targetUsers" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Who will use this?">
+            </div>
+            <div>
+              <label for="coreValueProp" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Core Value Proposition</label>
+              <textarea id="coreValueProp" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Why this solution?"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- Technical Specifications -->
+        <section class="fade-in">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">2</span>
+            Technical Specifications
+          </h2>
+          <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+            <div>
+              <label for="platform" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Platform</label>
+              <input type="text" id="platform" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Web / Mobile / Desktop / CLI">
+            </div>
+            <div>
+              <label for="stackPreference" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Stack Preference</label>
+              <input type="text" id="stackPreference" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Languages, frameworks, databases">
+            </div>
+            <div>
+              <label for="scaleExpectations" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Scale Expectations</label>
+              <textarea id="scaleExpectations" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Users, data volume, performance needs"></textarea>
+            </div>
+            <div>
+              <label for="integrationPoints" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Integration Points</label>
+              <textarea id="integrationPoints" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="External APIs, services, databases"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- Functional Requirements -->
+        <section class="fade-in">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">3</span>
+            Functional Requirements
+          </h2>
+          <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+            <div>
+              <label for="mvpFeatures" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">MVP Features</label>
+              <textarea id="mvpFeatures" rows="4" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="List essential features with user stories (one per line)"></textarea>
+            </div>
+            <div>
+              <label for="futureEnhancements" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Future Enhancements</label>
+              <textarea id="futureEnhancements" rows="3" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Nice-to-have features for later iterations"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- User Experience -->
+        <section class="fade-in">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">4</span>
+            User Experience
+          </h2>
+          <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+            <div>
+              <label for="keyUserFlows" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Key User Flows</label>
+              <textarea id="keyUserFlows" rows="3" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Describe 2-3 primary user interactions"></textarea>
+            </div>
+            <div>
+              <label for="uiStyle" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">UI Style</label>
+              <input type="text" id="uiStyle" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Minimalist / feature-rich, design references">
+            </div>
+            <div>
+              <label for="accessibility" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Accessibility</label>
+              <textarea id="accessibility" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Requirements for a11y compliance"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- Technical Constraints -->
+        <section class="fade-in">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">5</span>
+            Technical Constraints
+          </h2>
+          <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+            <div>
+              <label for="mustWorkWith" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Must Work With</label>
+              <textarea id="mustWorkWith" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Existing systems, APIs, infrastructure"></textarea>
+            </div>
+            <div>
+              <label for="performanceTargets" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Performance Targets</label>
+              <textarea id="performanceTargets" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Response times, load capacity"></textarea>
+            </div>
+            <div>
+              <label for="securityRequirements" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Security Requirements</label>
+              <textarea id="securityRequirements" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Auth, data protection, compliance"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- Success Criteria -->
+        <section class="fade-in">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">6</span>
+            Success Criteria
+          </h2>
+          <div class="space-y-3 bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+            <div>
+              <label for="deliverableFormat" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Deliverable Format</label>
+              <textarea id="deliverableFormat" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Repo structure, documentation expectations"></textarea>
+            </div>
+            <div>
+              <label for="qualityStandards" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Quality Standards</label>
+              <textarea id="qualityStandards" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="Testing, code style, documentation"></textarea>
+            </div>
+            <div>
+              <label for="deployment" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Deployment</label>
+              <textarea id="deployment" rows="2" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder="How and where should it run?"></textarea>
+            </div>
+          </div>
+        </section>
+
+        <!-- Reference Examples -->
+        <section class="fade-in">
+          <h2 class="text-sm font-semibold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 mb-3 flex items-center gap-2">
+            <span class="w-5 h-5 rounded bg-indigo-100 dark:bg-indigo-900/50 text-indigo-600 dark:text-indigo-400 text-xs flex items-center justify-center font-bold">7</span>
+            Reference Examples
+          </h2>
+          <div class="bg-white dark:bg-gray-900 rounded-xl border border-gray-200 dark:border-gray-800 p-4">
+            <div>
+              <label for="referenceExamples" class="block text-xs font-medium text-gray-500 dark:text-gray-400 mb-1">Analogies &amp; Inspirations</label>
+              <textarea id="referenceExamples" rows="3" class="field w-full rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-shadow" placeholder='e.g. "Think of it like Notion combined with the collaboration features from Figma"'></textarea>
+            </div>
+          </div>
+        </section>
+
+        <div class="h-8"></div>
+      </div>
+    </main>
+
+    <!-- Side Panel (Desktop) -->
+    <aside id="sidePanel" class="no-print hidden lg:flex flex-col w-[420px] xl:w-[480px] shrink-0 border-l border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 sticky top-14 h-[calc(100vh-3.5rem)]">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800">
+        <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Generated Prompt</h2>
+        <button onclick="copyPrompt()" id="copyBtn" class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/></svg>
+          <span id="copyBtnText">Copy</span>
+        </button>
+      </div>
+      <div id="promptOutput" class="flex-1 overflow-y-auto p-4 scrollbar-thin">
+        <div id="promptEmpty" class="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-600 text-center px-8">
+          <svg class="w-12 h-12 mb-3 opacity-50" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"/></svg>
+          <p class="text-sm">Fill in the form to generate your prompt</p>
+          <p class="text-xs mt-1 opacity-70">Only completed fields will appear</p>
+        </div>
+        <pre id="promptText" class="hidden whitespace-pre-wrap text-sm leading-relaxed font-mono text-gray-700 dark:text-gray-300"></pre>
+      </div>
+    </aside>
+  </div>
+
+  <!-- Mobile Panel Overlay -->
+  <div id="mobileOverlay" class="lg:hidden fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="toggleMobilePanel()"></div>
+    <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-white dark:bg-gray-900 shadow-2xl slide-in flex flex-col">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-800">
+        <h2 class="text-sm font-semibold text-gray-600 dark:text-gray-300">Generated Prompt</h2>
+        <div class="flex items-center gap-2">
+          <button onclick="copyPrompt()" id="copyBtnMobile" class="flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-md bg-indigo-600 text-white hover:bg-indigo-700 transition-colors">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.666 3.888A2.25 2.25 0 0 0 13.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a.75.75 0 0 1-.75.75H9.75a.75.75 0 0 1-.75-.75v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5a2.25 2.25 0 0 1-2.25 2.25H6.75A2.25 2.25 0 0 1 4.5 19.5V6.257c0-1.108.806-2.057 1.907-2.185a48.208 48.208 0 0 1 1.927-.184"/></svg>
+            <span id="copyBtnMobileText">Copy</span>
+          </button>
+          <button onclick="toggleMobilePanel()" class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+          </button>
+        </div>
+      </div>
+      <div id="mobilePromptOutput" class="flex-1 overflow-y-auto p-4 scrollbar-thin">
+        <div id="mobilePromptEmpty" class="flex flex-col items-center justify-center h-full text-gray-400 dark:text-gray-600 text-center px-8">
+          <p class="text-sm">Fill in the form to generate your prompt</p>
+        </div>
+        <pre id="mobilePromptText" class="hidden whitespace-pre-wrap text-sm leading-relaxed font-mono text-gray-700 dark:text-gray-300"></pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div id="historyModal" class="fixed inset-0 z-50 hidden">
+    <div class="absolute inset-0 bg-black/40" onclick="toggleHistory()"></div>
+    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-lg max-h-[80vh] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl flex flex-col fade-in border border-gray-200 dark:border-gray-800">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-gray-200 dark:border-gray-800">
+        <h2 class="text-sm font-semibold">Saved Prompts</h2>
+        <button onclick="toggleHistory()" class="p-1.5 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg>
+        </button>
+      </div>
+      <div id="historyList" class="flex-1 overflow-y-auto p-3 scrollbar-thin"></div>
+    </div>
+  </div>
+
+  <script>
+    // ── Field Definitions ──────────────────────────────────────────────
+    const SECTIONS = [
+      {
+        key: 'projectContext',
+        title: 'PROJECT CONTEXT',
+        fields: [
+          { id: 'problemStatement', label: 'Problem Statement' },
+          { id: 'targetUsers', label: 'Target Users' },
+          { id: 'coreValueProp', label: 'Core Value Proposition' },
+        ]
+      },
+      {
+        key: 'technicalSpecs',
+        title: 'TECHNICAL SPECIFICATIONS',
+        fields: [
+          { id: 'platform', label: 'Platform' },
+          { id: 'stackPreference', label: 'Stack Preference' },
+          { id: 'scaleExpectations', label: 'Scale Expectations' },
+          { id: 'integrationPoints', label: 'Integration Points' },
+        ]
+      },
+      {
+        key: 'functionalReqs',
+        title: 'FUNCTIONAL REQUIREMENTS',
+        fields: [
+          { id: 'mvpFeatures', label: 'MVP Features', multiline: true },
+          { id: 'futureEnhancements', label: 'Future Enhancements', multiline: true },
+        ]
+      },
+      {
+        key: 'userExperience',
+        title: 'USER EXPERIENCE',
+        fields: [
+          { id: 'keyUserFlows', label: 'Key User Flows' },
+          { id: 'uiStyle', label: 'UI Style' },
+          { id: 'accessibility', label: 'Accessibility' },
+        ]
+      },
+      {
+        key: 'technicalConstraints',
+        title: 'TECHNICAL CONSTRAINTS',
+        fields: [
+          { id: 'mustWorkWith', label: 'Must Work With' },
+          { id: 'performanceTargets', label: 'Performance Targets' },
+          { id: 'securityRequirements', label: 'Security Requirements' },
+        ]
+      },
+      {
+        key: 'successCriteria',
+        title: 'SUCCESS CRITERIA',
+        fields: [
+          { id: 'deliverableFormat', label: 'Deliverable Format' },
+          { id: 'qualityStandards', label: 'Quality Standards' },
+          { id: 'deployment', label: 'Deployment' },
+        ]
+      },
+      {
+        key: 'referenceExamples',
+        title: 'REFERENCE EXAMPLES',
+        fields: [
+          { id: 'referenceExamples', label: 'Analogies & Inspirations' },
+        ]
+      },
+    ];
+
+    const STORAGE_KEY = 'aiPromptEngineer_draft';
+    const HISTORY_KEY = 'aiPromptEngineer_history';
+
+    // ── State ──────────────────────────────────────────────────────────
+    let saveTimeout = null;
+
+    // ── Init ───────────────────────────────────────────────────────────
+    function init() {
+      loadDraft();
+      updatePrompt();
+      updateHistoryBadge();
+
+      document.querySelectorAll('.field').forEach(el => {
+        el.addEventListener('input', () => {
+          updatePrompt();
+          debounceSaveDraft();
+        });
+      });
+    }
+
+    // ── Prompt Generation ──────────────────────────────────────────────
+    function getFieldValues() {
+      const values = {};
+      SECTIONS.forEach(section => {
+        section.fields.forEach(field => {
+          const el = document.getElementById(field.id);
+          if (el) values[field.id] = el.value.trim();
+        });
+      });
+      return values;
+    }
+
+    function generatePrompt() {
+      const v = getFieldValues();
+      const parts = [];
+
+      parts.push('I want to build a new software project. Here are the detailed specifications:\n');
+
+      for (const section of SECTIONS) {
+        const lines = [];
+
+        for (const field of section.fields) {
+          const val = v[field.id];
+          if (!val) continue;
+
+          if (field.multiline) {
+            // For multiline fields, format each line as a numbered/bulleted item
+            const fieldLines = val.split('\n').filter(l => l.trim());
+            if (section.key === 'functionalReqs' && field.id === 'mvpFeatures') {
+              lines.push(`${field.label}:`);
+              fieldLines.forEach((l, i) => {
+                const cleaned = l.replace(/^\d+[\.\)]\s*/, '').replace(/^[-*]\s*/, '');
+                lines.push(`  ${i + 1}. ${cleaned}`);
+              });
+            } else if (field.id === 'futureEnhancements') {
+              lines.push(`${field.label}:`);
+              fieldLines.forEach(l => {
+                const cleaned = l.replace(/^[-*]\s*/, '');
+                lines.push(`  - ${cleaned}`);
+              });
+            } else {
+              lines.push(`- ${field.label}: ${val}`);
+            }
+          } else {
+            lines.push(`- ${field.label}: ${val}`);
+          }
+        }
+
+        if (lines.length > 0) {
+          parts.push(`${section.title}:\n${lines.join('\n')}`);
+        }
+      }
+
+      if (parts.length <= 1) return '';
+
+      parts.push('Please help me build this project from scratch. Provide a complete implementation plan including:\n1. Architecture overview and key design decisions\n2. Recommended project structure\n3. Step-by-step implementation guide\n4. Full working code for the MVP features\n5. Setup and deployment instructions');
+
+      return parts.join('\n\n');
+    }
+
+    function updatePrompt() {
+      const prompt = generatePrompt();
+
+      // Desktop
+      const textEl = document.getElementById('promptText');
+      const emptyEl = document.getElementById('promptEmpty');
+      // Mobile
+      const mTextEl = document.getElementById('mobilePromptText');
+      const mEmptyEl = document.getElementById('mobilePromptEmpty');
+
+      if (prompt) {
+        textEl.textContent = prompt;
+        textEl.classList.remove('hidden');
+        emptyEl.classList.add('hidden');
+        mTextEl.textContent = prompt;
+        mTextEl.classList.remove('hidden');
+        mEmptyEl.classList.add('hidden');
+      } else {
+        textEl.classList.add('hidden');
+        emptyEl.classList.remove('hidden');
+        mTextEl.classList.add('hidden');
+        mEmptyEl.classList.remove('hidden');
+      }
+    }
+
+    // ── Copy ───────────────────────────────────────────────────────────
+    async function copyPrompt() {
+      const prompt = generatePrompt();
+      if (!prompt) return;
+
+      try {
+        await navigator.clipboard.writeText(prompt);
+        showCopyFeedback(true);
+      } catch {
+        // Fallback
+        const ta = document.createElement('textarea');
+        ta.value = prompt;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        showCopyFeedback(true);
+      }
+    }
+
+    function showCopyFeedback(success) {
+      const btns = ['copyBtnText', 'copyBtnMobileText'];
+      const containers = ['copyBtn', 'copyBtnMobile'];
+
+      btns.forEach((id, i) => {
+        const el = document.getElementById(id);
+        const container = document.getElementById(containers[i]);
+        if (!el) return;
+        el.textContent = success ? 'Copied!' : 'Failed';
+        container.classList.add('copy-flash');
+        if (success) {
+          container.classList.remove('bg-indigo-600', 'hover:bg-indigo-700');
+          container.classList.add('bg-green-600', 'hover:bg-green-700');
+        }
+        setTimeout(() => {
+          el.textContent = 'Copy';
+          container.classList.remove('copy-flash', 'bg-green-600', 'hover:bg-green-700');
+          container.classList.add('bg-indigo-600', 'hover:bg-indigo-700');
+        }, 1500);
+      });
+    }
+
+    // ── LocalStorage Draft ─────────────────────────────────────────────
+    function saveDraft() {
+      const values = getFieldValues();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(values));
+    }
+
+    function debounceSaveDraft() {
+      clearTimeout(saveTimeout);
+      saveTimeout = setTimeout(saveDraft, 400);
+    }
+
+    function loadDraft() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return;
+        const values = JSON.parse(raw);
+        for (const [id, val] of Object.entries(values)) {
+          const el = document.getElementById(id);
+          if (el) el.value = val;
+        }
+      } catch { /* ignore corrupt data */ }
+    }
+
+    // ── History ────────────────────────────────────────────────────────
+    function getHistory() {
+      try {
+        return JSON.parse(localStorage.getItem(HISTORY_KEY) || '[]');
+      } catch { return []; }
+    }
+
+    function saveHistory(history) {
+      localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+      updateHistoryBadge();
+    }
+
+    function saveToHistory() {
+      const values = getFieldValues();
+      const hasContent = Object.values(values).some(v => v);
+      if (!hasContent) return;
+
+      const name = values.problemStatement
+        ? values.problemStatement.substring(0, 60)
+        : values.targetUsers || 'Untitled Project';
+
+      const entry = {
+        id: Date.now(),
+        name,
+        timestamp: new Date().toISOString(),
+        fields: values,
+      };
+
+      const history = getHistory();
+      history.unshift(entry);
+      // Keep last 50
+      if (history.length > 50) history.length = 50;
+      saveHistory(history);
+      renderHistory();
+    }
+
+    function loadFromHistory(id) {
+      const history = getHistory();
+      const entry = history.find(h => h.id === id);
+      if (!entry) return;
+
+      // Clear all fields first
+      document.querySelectorAll('.field').forEach(el => el.value = '');
+
+      for (const [fieldId, val] of Object.entries(entry.fields)) {
+        const el = document.getElementById(fieldId);
+        if (el) el.value = val;
+      }
+
+      updatePrompt();
+      saveDraft();
+      toggleHistory();
+    }
+
+    function deleteFromHistory(id, event) {
+      event.stopPropagation();
+      const history = getHistory().filter(h => h.id !== id);
+      saveHistory(history);
+      renderHistory();
+    }
+
+    function updateHistoryBadge() {
+      const badge = document.getElementById('historyBadge');
+      const count = getHistory().length;
+      if (count > 0) {
+        badge.textContent = count > 9 ? '9+' : count;
+        badge.classList.remove('hidden');
+      } else {
+        badge.classList.add('hidden');
+      }
+    }
+
+    function renderHistory() {
+      const list = document.getElementById('historyList');
+      const history = getHistory();
+
+      if (history.length === 0) {
+        list.innerHTML = `
+          <div class="flex flex-col items-center justify-center py-12 text-gray-400 dark:text-gray-600">
+            <svg class="w-10 h-10 mb-2 opacity-50" fill="none" stroke="currentColor" stroke-width="1" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/></svg>
+            <p class="text-sm">No saved prompts yet</p>
+            <p class="text-xs mt-1 opacity-70">Click "Save" to store your current prompt</p>
+          </div>`;
+        return;
+      }
+
+      list.innerHTML = history.map(entry => {
+        const date = new Date(entry.timestamp);
+        const dateStr = date.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+        const timeStr = date.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' });
+
+        return `
+          <div onclick="loadFromHistory(${entry.id})"
+               class="group flex items-start gap-3 p-3 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors mb-1">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-medium truncate">${escapeHtml(entry.name)}</p>
+              <p class="text-xs text-gray-400 dark:text-gray-500 mt-0.5">${dateStr} at ${timeStr}</p>
+            </div>
+            <button onclick="deleteFromHistory(${entry.id}, event)"
+                    class="opacity-0 group-hover:opacity-100 p-1 rounded hover:bg-red-100 dark:hover:bg-red-900/30 text-gray-400 hover:text-red-500 transition-all shrink-0"
+                    title="Delete">
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/></svg>
+            </button>
+          </div>`;
+      }).join('');
+    }
+
+    function toggleHistory() {
+      const modal = document.getElementById('historyModal');
+      const isOpen = !modal.classList.contains('hidden');
+      if (isOpen) {
+        modal.classList.add('hidden');
+      } else {
+        renderHistory();
+        modal.classList.remove('hidden');
+      }
+    }
+
+    // ── Mobile Panel ───────────────────────────────────────────────────
+    function toggleMobilePanel() {
+      const overlay = document.getElementById('mobileOverlay');
+      overlay.classList.toggle('hidden');
+      document.body.style.overflow = overlay.classList.contains('hidden') ? '' : 'hidden';
+    }
+
+    // ── Clear Form ─────────────────────────────────────────────────────
+    function clearForm() {
+      if (!confirm('Clear all fields? This cannot be undone.')) return;
+      document.querySelectorAll('.field').forEach(el => el.value = '');
+      updatePrompt();
+      saveDraft();
+    }
+
+    // ── Utils ──────────────────────────────────────────────────────────
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // ── Boot ───────────────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', init);
+  </script>
+</body>
+</html>
